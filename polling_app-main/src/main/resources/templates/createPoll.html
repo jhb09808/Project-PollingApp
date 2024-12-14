@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a New Poll - Poll Master</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-blue-600">Create a New Poll</h1>
+        </header>
+        
+        <form id="pollForm" th:action="@{/create}" th:object="${pollCreationDto}" method="post" class="bg-white rounded-lg shadow-md p-6">
+            <div class="mb-4">
+                <label for="title" class="block text-gray-700 font-bold mb-2">Poll Title</label>
+                <input type="text" id="title" th:field="*{title}" placeholder="Enter poll title" required
+       class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+            </div>
+            
+            <div id="questions" class="space-y-6">
+                <div class="question border-t pt-4">
+                    <label for="question0" class="block text-gray-700 font-bold mb-2">Question 1</label>
+                    <input type="text" id="question0" th:field="*{questions[0].text}" placeholder="Enter question" required
+       class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500 mb-2">
+<div class="options space-y-2">
+    <input type="text" th:field="*{questions[0].options[0]}" placeholder="Option 1" required
+           class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+    <input type="text" th:field="*{questions[0].options[1]}" placeholder="Option 2" required
+           class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+</div>
+                    <button type="button" class="addOption mt-2 text-blue-500 hover:text-blue-600">+ Add Option</button>
+                </div>
+            </div>
+            
+            <button type="button" id="addQuestion" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Add Question
+            </button>
+            
+            <button type="submit" class="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Create Poll
+            </button>
+        </form>
+        
+        <div class="mt-6 text-center">
+            <a href="/index" class="text-blue-500 hover:underline">Back to polls list</a>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            let questionCount = 1;
+            
+            $('#addQuestion').click(function() {
+                questionCount++;
+                const newQuestion = `
+    <div class="question border-t pt-4 mt-4">
+        <label for="question${questionCount-1}" class="block text-gray-700 font-bold mb-2">Question ${questionCount}</label>
+        <input type="text" name="questions[${questionCount-1}].text" placeholder="Enter question" required
+               class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500 mb-2">
+        <div class="options space-y-2">
+            <input type="text" name="questions[${questionCount-1}].options[0]" placeholder="Option 1" required
+                   class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+            <input type="text" name="questions[${questionCount-1}].options[1]" placeholder="Option 2" required
+                   class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+        </div>
+        <button type="button" class="addOption mt-2 text-blue-500 hover:text-blue-600">+ Add Option</button>
+    </div>
+`;
+                $('#questions').append(newQuestion);
+            });
+
+            $(document).on('click', '.addOption', function() {
+                const questionDiv = $(this).closest('.question');
+                const optionCount = questionDiv.find('.options input').length;
+                const questionIndex = $('.question').index(questionDiv);
+                const newOption = `
+    <input type="text" name="questions[${questionIndex}].options[${optionCount}]" placeholder="Option ${optionCount + 1}" required
+           class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+`;
+                questionDiv.find('.options').append(newOption);
+            });
+        });
+    </script>
+</body>
+</html>

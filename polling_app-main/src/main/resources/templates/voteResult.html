@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote Result - Poll Master</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-blue-600">Vote Result</h1>
+            <h2 th:text="${poll.title}" class="text-xl text-gray-600 mt-2">Poll Title</h2>
+        </header>
+        
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <ul class="space-y-8">
+                <li th:each="question, questionStat : ${poll.questions}">
+                    <h3 th:text="${question.text}" class="text-lg font-semibold mb-4">Question Text</h3>
+                    <ul class="list-disc pl-5">
+                        <li th:each="option : ${question.options}" class="mb-2">
+                            <span th:text="${option.text}" class="font-medium">Option Text</span>: 
+                            <span th:text="${option.votes}" class="font-bold">0</span> votes
+                        </li>
+                    </ul>
+                    <canvas th:id="${'chart-' + questionStat.index}" width="400" height="200"></canvas>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="mt-6 text-center">
+            <a th:href="@{/}" class="text-blue-500 hover:underline">Back to polls list</a>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            /*[# th:each="question, questionStat : ${poll.questions}"]*/
+            (function() {
+                var ctx = document.getElementById(/*[[${'"chart-' + questionStat.index + '"'}]]*/).getContext('2d');
+                var options = /*[[${question.options}]]*/ [];
+                if (options && options.length > 0) {
+                    var votes = options.map(function(option) { return option.votes; });
+                    var labels = options.map(function(option) { return option.text; });
+                    var chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Votes',
+                                data: votes,
+                                backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                                borderColor: 'rgb(59, 130, 246)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    // Use the chart instance
+                    chart.update();
+                }
+            })();
+            /*[/]*/
+        });
+    </script>
+</body>
+</html>

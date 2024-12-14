@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Poll Master - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">Welcome to Poll Master</h1>
+        
+        <div class="mb-8 text-center">
+            <p class="mb-4">To create a poll, you need to register and login.</p>
+            <div class="flex justify-center space-x-4">
+                <a href="/register" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Register</a>
+                <a href="/login" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Login</a>
+            </div>
+        </div>
+        
+        <div class="mb-8 text-center">
+            <p class="mb-4">To participate in a poll, enter the poll code below:</p>
+            <form th:action="@{/poll}" method="get" class="flex justify-center items-center space-x-2">
+                <input type="text" name="code" placeholder="Enter poll code" class="border rounded py-2 px-3" required>
+                <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Enter Poll</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

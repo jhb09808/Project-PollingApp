@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Polls</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-4">My Polls</h1>
+        
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div th:if="${#lists.isEmpty(polls)}" class="text-center text-gray-600">
+                <p>You haven't created any polls yet.</p>
+            </div>
+            <ul th:unless="${#lists.isEmpty(polls)}">
+                <li th:each="poll : ${polls}" class="mb-4 flex items-center justify-between">
+                    <a th:href="@{/poll/{code}(code=${poll.code})}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex-grow text-center mr-4" th:text="${poll.title}">Poll Title</a>
+                    <span th:if="${poll.published}" class="text-green-600 font-semibold">Published</span>
+                    <span th:unless="${poll.published}" class="text-yellow-600 font-semibold">Draft</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="flex space-x-4">
+            <a th:href="@{/index}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                Return to Home
+            </a>
+            <a th:href="@{/}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                Return to Login
+            </a>
+            <a href="/create" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Create a new poll
+            </a>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

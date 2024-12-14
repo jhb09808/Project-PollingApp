@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${poll.title} + ' - Poll Master'">Poll Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 th:text="${poll.title}" class="text-3xl font-bold text-blue-600">Poll Title</h1>
+        </header>
+        
+        <form th:action="@{/vote/{pollId}(pollId=${poll.id})}" method="post" class="bg-white rounded-lg shadow-md p-6">
+            <ul class="space-y-6">
+                <li th:each="question, questionStat : ${poll.questions}" class="border-b pb-4 last:border-b-0">
+                    <fieldset>
+                        <legend th:text="${question.text}" class="text-lg font-semibold mb-2"></legend>
+                        <div class="space-y-2">
+                            <div th:each="option, optionStat : ${question.options}" class="flex items-center">
+                                <input type="radio" 
+                                       th:id="${'q' + questionStat.index + 'o' + optionStat.index}"
+                                       th:name="${'question' + questionStat.index}" 
+                                       th:value="${optionStat.index}"
+                                       class="form-radio h-4 w-4 text-blue-600"
+                                       required/>
+                                <label th:for="${'q' + questionStat.index + 'o' + optionStat.index}" 
+                                       th:text="${option.text}"
+                                       class="ml-2 text-gray-700"></label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </li>
+            </ul>
+            <button type="submit" class="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Submit Vote
+            </button>
+        </form>
+        
+        <div class="mt-6 text-center">
+            <a th:href="@{/index}" class="text-blue-500 hover:underline">Back to polls list</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html> 
+<html lang="en" xmlns:th="http://www.thymeleaf.org"> 
+    <head> 
+        <meta charset="UTF-8"> 
+        <title>Manage Poll</title> 
+        <script src="https://cdn.tailwindcss.com"></script> 
+    </head> 
+    <body class="bg-gray-100"> 
+        <div class="container mx-auto px-4 py-8"> 
+            <h1 class="text-3xl font-bold mb-4" th:text="${poll.title}">Poll Title</h1>
+            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <p class="mb-4">Share this code for others to answer: <strong th:text="${poll.code}"></strong></p>
+                
+                <div class="flex space-x-4 mb-4">
+                    <a th:href="@{/poll/{code}/edit(code=${poll.code})}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Edit Poll
+                    </a>
+                    <form th:action="@{/poll/{code}/publish(code=${poll.code})}" method="post">
+                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            <span th:text="${poll.published ? 'Unpublish' : 'Publish'}"></span>
+                        </button>
+                    </form>
+                    <a th:href="@{/poll/{code}/results(code=${poll.code})}" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                        View Results
+                    </a>
+                </div>
+                
+                <div th:each="question : ${poll.questions}" class="mb-4">
+                    <h2 class="text-xl font-bold mb-2" th:text="${question.text}">Question Text</h2>
+                    <ul class="list-disc pl-5">
+                        <li th:each="option : ${question.options}">
+                            <span th:text="${option.text}"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <a th:href="@{/index}" class="fixed-bottom-right bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                Return to Home
+            </a>
+            <br><br>
+            <a th:href="@{/}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                Return to Login
+            </a>
+        </div>
+    </body> 
+</html>

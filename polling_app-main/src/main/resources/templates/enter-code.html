@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Enter Poll Code - Poll Master</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">Enter Poll Code</h1>
+        <form th:action="@{/enter-code}" method="post" class="max-w-md mx-auto">
+            <div class="mb-4">
+                <label for="code" class="block text-gray-700 text-sm font-bold mb-2">Poll Code:</label>
+                <input type="text" id="code" name="code" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="flex items-center justify-between">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Enter Poll</button>
+            </div>
+        </form>
+        <div th:if="${error}" class="mt-4 text-red-500 text-center">
+            <p th:text="${error}"></p>
+        </div>
+    </div>
+</body>
+</html>

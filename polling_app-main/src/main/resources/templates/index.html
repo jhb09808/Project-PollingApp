@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poll Master - Available Polls</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-blue-600">Poll Master</h1>
+            <p class="text-gray-600">Choose a poll to participate in</p>
+        </header>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div th:each="poll : ${polls}" class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <a th:href="@{/poll/{id}(id=${poll.id})}" class="block p-6">
+                    <h2 th:text="${poll.title}" class="text-xl font-semibold text-gray-800 mb-2">Poll Title</h2>
+                    <p class="text-gray-600">Click to view and vote</p>
+                </a>
+            </div>
+        </div>
+        
+        <div class="mt-8 text-center">
+            <a href="/create" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Create a new poll
+            </a>
+
+            <a href="/my-polls" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300 ml-4">
+                My Polls
+            </a>
+        </div>
+    </div>
+</body>
+</html>

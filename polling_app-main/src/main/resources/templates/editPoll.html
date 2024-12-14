@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Poll</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-4">Edit Poll</h1>
+        
+        <form th:action="@{/poll/{code}/edit(code=${poll.code})}" method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label for="title" class="block text-gray-700 font-bold mb-2">Poll Title</label>
+                <input type="text" id="title" name="title" th:value="${pollCreationDto.title}" required
+                       class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+            </div>
+            
+            <div id="questions">
+                <div th:each="question, qStat : ${pollCreationDto.questions}" class="mb-6 question-block">
+                    <div class="mb-4">
+                        <label th:for="${'question' + qStat.index}" class="block text-gray-700 font-bold mb-2" th:text="'Question ' + ${qStat.index + 1}">Question</label>
+                        <input type="text" th:id="${'question' + qStat.index}" th:name="${'questions[' + qStat.index + '].text'}" th:value="${question.text}" required
+                               class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="options ml-4">
+                        <div th:each="option, oStat : ${question.options}" class="mb-2">
+                            <label th:for="${'option' + qStat.index + '-' + oStat.index}" class="block text-gray-700 font-bold mb-2" th:text="'Option ' + ${oStat.index + 1}">Option</label>
+                            <input type="text" th:id="${'option' + qStat.index + '-' + oStat.index}" th:name="${'questions[' + qStat.index + '].options[' + oStat.index + ']'}" th:value="${option}" required
+                                   class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+                    <button type="button" class="addOption mt-2 text-blue-500 hover:text-blue-600">+ Add Option</button>
+                </div>
+            </div>
+            
+            <button type="button" id="addQuestion" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                Add New Question
+            </button>
+            
+            <button type="submit" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Update Poll
+            </button>
+        </form>
+    </div>
+    
+    <script>
+        $(document).ready(function() {
+            $('.addOption').click(function() {
+                const questionBlock = $(this).closest('.question-block');
+                const optionsDiv = questionBlock.find('.options');
+                const questionIndex = $('.question-block').index(questionBlock);
+                const optionCount = optionsDiv.children().length;
+                
+                const newOption = `
+                    <div class="mb-2">
+                        <label for="option${questionIndex}-${optionCount}" class="block text-gray-700 font-bold mb-2">Option ${optionCount + 1}</label>
+                        <input type="text" id="option${questionIndex}-${optionCount}" name="questions[${questionIndex}].options[${optionCount}]" required
+                               class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+                    </div>
+                `;
+                
+                optionsDiv.append(newOption);
+            });
+    
+            $('#addQuestion').click(function() {
+                const questionCount = $('.question-block').length;
+                const newQuestion = `
+                    <div class="mb-6 question-block">
+                        <div class="mb-4">
+                            <label for="question${questionCount}" class="block text-gray-700 font-bold mb-2">Question ${questionCount + 1}</label>
+                            <input type="text" id="question${questionCount}" name="questions[${questionCount}].text" required
+                                   class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div class="options ml-4">
+                            <div class="mb-2">
+                                <label for="option${questionCount}-0" class="block text-gray-700 font-bold mb-2">Option 1</label>
+                                <input type="text" id="option${questionCount}-0" name="questions[${questionCount}].options" required
+                                       class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div class="mb-2">
+                                <label for="option${questionCount}-1" class="block text-gray-700 font-bold mb-2">Option 2</label>
+                                <input type="text" id="option${questionCount}-1" name="questions[${questionCount}].options[1]" required
+                                       class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-blue-500">
+                            </div>
+                        </div>
+                        <button type="button" class="addOption mt-2 text-blue-500 hover:text-blue-600">+ Add Option</button>
+                    </div>
+                `;
+                
+                $('#questions').append(newQuestion);
+            });
+        });
+    </script>
+</body>
+</html>
